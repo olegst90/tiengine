@@ -1,0 +1,40 @@
+package com.tiengine;
+
+import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.LuaError;
+import org.luaj.vm2.lib.*;
+
+
+public abstract class AbstractScriptInterface extends TwoArgFunction {
+    protected LuaValue __ns = tableOf();
+
+    public abstract LuaValue call(LuaValue modname, LuaValue env);
+
+    AbstractScriptInterface() {
+        __ns.set("version", new __version());
+    }
+    public void enableReadOnly() {
+        LuaValue mt = __ns.getmetatable();
+        if (mt == null)
+            mt = tableOf();
+
+        mt.set(LuaValue.NEWINDEX, new __newindex_const());
+        __ns.setmetatable(mt);
+    }
+
+    private class __newindex_const extends ThreeArgFunction {
+        public LuaValue call(LuaValue arg1, LuaValue arg2, LuaValue arg3){
+            throw new LuaError("Const violation");
+        }
+    }
+
+    private class __version extends ZeroArgFunction {
+        public LuaValue call() {
+            return LuaValue.valueOf(version());
+        }
+    }
+
+    protected String version() {
+        return "0.0.1";
+    }
+}
