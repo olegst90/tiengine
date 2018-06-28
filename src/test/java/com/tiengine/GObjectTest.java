@@ -1,14 +1,18 @@
 package com.tiengine;
 
+import com.tiengine.controls.GButton;
+import com.tiengine.controls.GControlFactory;
+import com.tiengine.graphics.GGraphicFactory;
+import com.tiengine.graphics.GSprite;
+import com.tiengine.graphics.GTextArea;
 import com.tiengine.objects.GObjectHub;
-import com.tiengine.scripting.RootScriptInterface;
 import com.tiengine.scripting.ScriptEngine;
 
 import org.junit.*;
 import static org.junit.Assert.*;
 import org.junit.runners.MethodSorters;
 import org.junit.FixMethodOrder;
-import org.luaj.vm2.LuaError;
+
 import com.tiengine.objects.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,31 +23,10 @@ import org.slf4j.LoggerFactory;
  * @author olegst, @date 6/27/18 9:39 AM
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class LibraryTest {
-    ScriptEngine se = null;
-    static Logger logger = LoggerFactory.getLogger(GObject.class);
+public class GObjectTest {
+     static Logger logger = LoggerFactory.getLogger(GObjectTest.class);
 
-    @Before
-    public void setUp() {
-        se = new ScriptEngine();
-    }
-
-    @Test public void test_01_ScriptEngineRun() {
-        assertTrue("se not inited", se != null);
-        try {
-            se.setExitHandler(new RootScriptInterface.ExitHandler() {
-                @Override
-                public void exit() {
-                    System.out.println("Exit was requested");
-                }
-            });
-            se.loadScript("src/test/lua/test.lua");
-        } catch (LuaError e) {
-            System.out.println(e.toString());
-        }
-    }
-
-    @Test public void test_02_objectHub() {
+    @Test public void test_01_objectHub() {
         GObjectHub hub = new GObjectHub();
         hub.putObject(new GObject(), 0);
         hub.putObject(new GObject(), 0);

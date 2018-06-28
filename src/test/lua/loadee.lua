@@ -1,2 +1,3 @@
 print ("Hello from loaded script")
-script_interface.terminate_script()
+i = 10
+load_script("src/test/lua/loadee2.lua", true)

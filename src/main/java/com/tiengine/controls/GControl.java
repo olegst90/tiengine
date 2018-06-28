@@ -1,16 +1,13 @@
 package com.tiengine.controls;
 
+
+import com.tiengine.graphics.GGraphicHost;
+
 /**
- * Created by olegst on 6/27/18.
+ * Created by olegst on 28.06.18.
  */
 
-public class GControl {
-    public interface GControlCallback {
-        void call();
-    }
-    GControlCallback __cb;
-    public void setCallback(GControlCallback cb) {
-        __cb = cb;
-        cb.call();
-    }
+public abstract class GControl {
+    abstract void attachToGraphicHost(GGraphicHost host);
+    abstract void detachFromGraphicHost(GGraphicHost host);
 }

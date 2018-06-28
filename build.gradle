@@ -1,5 +1,7 @@
 apply plugin: 'java'
 
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'
 
 repositories {
     jcenter()
@@ -15,5 +17,6 @@ dependencies {
 
 test {
     testLogging.showStandardStreams = true
+    jvmArgs  "-Dorg.slf4j.simpleLogger.defaultLogLevel=debug"
 }
 
