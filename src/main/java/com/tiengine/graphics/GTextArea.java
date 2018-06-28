@@ -9,6 +9,4 @@ public class GTextArea extends GDrawable {
     public void setText(String text) {
         __text = text;
     }
-
-
 }

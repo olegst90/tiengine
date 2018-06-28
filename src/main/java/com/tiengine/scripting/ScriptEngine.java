@@ -3,6 +3,7 @@ package com.tiengine.scripting;
 
 import com.tiengine.controls.GControlHost;
 import com.tiengine.graphics.GGraphicHost;
+import com.tiengine.utils.ResourceFactory;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaError;
@@ -19,6 +20,8 @@ import org.omg.CORBA.SystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -99,7 +102,16 @@ public class ScriptEngine {
         }
         public LuaValue call(LuaValue script) {
             logger.info("Thread started. Loading script {}", script.toString());
-            __globals.loadfile(script.toString()).call();
+            try {
+                __globals.load(new InputStreamReader(ResourceFactory.resourceFactory().loadScript(script.toString())),
+                        script.toString()).call();
+            } catch (FileNotFoundException e) {
+                logger.error("Could not load script {}", script.toString());
+                LuaValue arg[] = {
+                        LuaValue.valueOf(TERMINATE),
+                };
+                __state_stack.peek().thread.state.lua_yield(LuaValue.varargsOf(arg));
+            }
             logger.info("Script {} is executed, going async", script.toString());
             do {
                 synchronized (__messages) {

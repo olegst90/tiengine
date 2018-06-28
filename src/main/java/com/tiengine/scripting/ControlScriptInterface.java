@@ -1,5 +1,5 @@
 package com.tiengine.scripting;
-import com.sun.corba.se.impl.oa.poa.POAPolicyMediatorImpl_R_AOM;
+
 import com.tiengine.controls.*;
 import com.tiengine.graphics.GGraphicFactory;
 import com.tiengine.graphics.GTextArea;

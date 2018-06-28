@@ -1,0 +1,15 @@
+package com.tiengine.scripting;
+
+import org.luaj.vm2.LuaValue;
+
+/**
+ * Created by olegst on 28.06.18.
+ */
+
+public class Storage {
+    public void set(LuaValue key, LuaValue value)
+    {
+
+    }
+    public LuaValue get(LuaValue key);
+}
