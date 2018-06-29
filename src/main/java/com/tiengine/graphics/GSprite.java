@@ -5,5 +5,6 @@ package com.tiengine.graphics;
  */
 
 public class GSprite extends GDrawable {
-
+    int __texId;
+    public void setTexture(int id) {__texId = id;}
 }

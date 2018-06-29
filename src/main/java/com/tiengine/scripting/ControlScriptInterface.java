@@ -12,10 +12,10 @@ import org.luaj.vm2.lib.*;
 import org.luaj.vm2.LuaError;
 
 public class ControlScriptInterface extends LuaTable {
-    ScriptEngine __parent_engine;
-    ControlScriptInterface (ScriptEngine parent_engine) {
+    ScriptHost __script_host;
+    ControlScriptInterface (ScriptHost script_host) {
         System.out.println("control script interface constructor");
-        __parent_engine = parent_engine;
+        __script_host = script_host;
         set("new_button", new NewButton());
         set("new_text", new NewTextArea());
     }
@@ -29,7 +29,7 @@ public class ControlScriptInterface extends LuaTable {
             ctrl.setCallback(new GButton.GButtonCallback() {
                 @Override
                 public void call() {
-                    __parent_engine.postMessage(new Runnable() {
+                    __script_host.postMessage(new Runnable() {
                         LuaFunction cb = arg.checkfunction(5);
                         @Override
                         public void run() {
@@ -38,7 +38,7 @@ public class ControlScriptInterface extends LuaTable {
                     });
                 }
             });
-            __parent_engine.controlHost().putControl(ctrl);
+            __script_host.getControlHost().putControl(ctrl);
             ctrl.press();
             return LuaValue.userdataOf(ctrl);
         }

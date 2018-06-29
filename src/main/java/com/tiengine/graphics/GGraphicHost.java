@@ -4,20 +4,27 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class GGraphicHost {
-    List<GSprite> __sprites = new LinkedList<>();
-    public void putSprite(GSprite sprite) {
-        __sprites.add(sprite);
-    }
-    public void removeSprite(GSprite sprite) {
-        __sprites.remove(sprite);
+    public static class State {
+        List<GSprite> __sprites = new LinkedList<>();
+        List<GTextArea> __texts = new LinkedList<>();
     }
 
-    List<GTextArea> __texts = new LinkedList<>();
+    State __state = new State();
+
+    public void setState(State state) {__state = state;}
+    public State getState() {return __state;}
+
+    public void putSprite(GSprite sprite) {
+        __state.__sprites.add(sprite);
+    }
+    public void removeSprite(GSprite sprite) {__state.__sprites.remove(sprite);}
+
+
     public void putTextArea(GTextArea text) {
-        __texts.add(text);
+        __state.__texts.add(text);
     }
     public void removeTextArea(GTextArea text) {
-        __texts.remove(text);
+        __state.__texts.remove(text);
     }
 
     //public void

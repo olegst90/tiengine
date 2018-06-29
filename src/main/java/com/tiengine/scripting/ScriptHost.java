@@ -7,7 +7,6 @@ import com.tiengine.utils.ResourceFactory;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaError;
-import org.luaj.vm2.LuaFunction;
 import org.luaj.vm2.LuaThread;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.OrphanedThread;
@@ -16,32 +15,26 @@ import org.luaj.vm2.lib.OneArgFunction;
 import org.luaj.vm2.lib.jse.JseBaseLib;
 import org.luaj.vm2.LoadState;
 import org.luaj.vm2.compiler.LuaC;
-import org.omg.CORBA.SystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 
-public class ScriptEngine {
-    static Logger logger = LoggerFactory.getLogger(ScriptEngine.class);
+public class ScriptHost {
+    static Logger logger = LoggerFactory.getLogger(ScriptHost.class);
 
     class EngineState {
         LuaThread thread;
         String script;
-        GGraphicHost graphicHost;
-        GControlHost controlHost;
+        GGraphicHost.State graphicHostState;
+        GControlHost.State controlHostState;
     }
     Map<String, EngineState> __state_cache = new HashMap<String, EngineState>();
     Stack<EngineState> __state_stack = new Stack<EngineState>();
@@ -54,18 +47,24 @@ public class ScriptEngine {
         }
     }
 
-    public GGraphicHost graphicHost() {
-        synchronized (__state_stack) {
-            return __state_stack.peek().graphicHost;
-        }
+    GGraphicHost __graphicHost;
+    public void setGraphicHost(GGraphicHost host) {
+        __graphicHost = host;
     }
-    public GControlHost controlHost() {
-        synchronized (__state_stack) {
-            return __state_stack.peek().controlHost;
-        }
+    public GGraphicHost getGraphicHost() {
+        return __graphicHost;
     }
 
-    public ScriptEngine() {
+    GControlHost __controlHost;
+    public void setControlHost(GControlHost host) {
+        __controlHost = host;
+    }
+    public GControlHost getControlHost() {
+        return __controlHost;
+    }
+
+
+    public ScriptHost() {
         __root_script = new RootScriptInterface(this);
         __root_script.setLoadHandler(new RootScriptInterface.LoadHandler() {
             @Override
@@ -141,8 +140,13 @@ public class ScriptEngine {
     void initialLoad(String script) {
         EngineState state = new EngineState();
         state.script = script;
-        state.graphicHost = new GGraphicHost();
-        state.controlHost = new GControlHost(state.graphicHost);
+
+        state.graphicHostState = new GGraphicHost.State();
+        __graphicHost.setState(state.graphicHostState);
+
+        state.controlHostState = new GControlHost.State();
+        __controlHost.setState(state.controlHostState);
+
         Globals globals = newGlobals();
         state.thread = new LuaThread(globals, new ScriptZigote(globals));
         __state_cache.put(script, state);
@@ -192,14 +196,19 @@ public class ScriptEngine {
                 if (new_state == null) {
                     logger.debug("Creating new state");
                     new_state = new EngineState();
-                    new_state.graphicHost = new GGraphicHost();
-                    new_state.controlHost = new GControlHost(new_state.graphicHost);
+                    new_state.graphicHostState = new GGraphicHost.State();
+                    __graphicHost.setState(new_state.graphicHostState);
+
+                    new_state.controlHostState = new GControlHost.State();
+                    __controlHost.setState(new_state.controlHostState);
                     new_state.script = script.toString();
                     Globals globals = newGlobals();
                     new_state.thread = new LuaThread(globals, new ScriptZigote(globals));
                     __state_cache.put(script, new_state);
                 } else {
                     logger.debug("State was restored from cache\n");
+                    __graphicHost.setState(new_state.graphicHostState);
+                    __controlHost.setState(new_state.controlHostState);
                 }
                 __state_stack.push(new_state);
             }

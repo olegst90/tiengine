@@ -1,15 +1,8 @@
 package com.tiengine;
 
-import com.tiengine.controls.GButton;
-import com.tiengine.controls.GControlFactory;
-import com.tiengine.graphics.GGraphicFactory;
-import com.tiengine.graphics.GSprite;
-import com.tiengine.graphics.GTextArea;
 import com.tiengine.objects.GObjectHub;
-import com.tiengine.scripting.ScriptEngine;
 
 import org.junit.*;
-import static org.junit.Assert.*;
 import org.junit.runners.MethodSorters;
 import org.junit.FixMethodOrder;
 

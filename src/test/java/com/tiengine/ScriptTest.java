@@ -1,6 +1,8 @@
 package com.tiengine;
 
-import com.tiengine.scripting.ScriptEngine;
+import com.tiengine.controls.GControlHost;
+import com.tiengine.graphics.GGraphicHost;
+import com.tiengine.scripting.ScriptHost;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
@@ -13,19 +15,21 @@ import static org.junit.Assert.assertTrue;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ScriptTest {
-    ScriptEngine se = null;
+    ScriptHost se = null;
     static Logger logger = LoggerFactory.getLogger(ScriptTest.class);
 
     @Before
     public void setUp() {
         TestInit.init();
-        se = new ScriptEngine();
+        se = new ScriptHost();
+        se.setGraphicHost(new GGraphicHost());
+        se.setControlHost(new GControlHost(se.getGraphicHost()));
     }
 
     @Test public void test_01_ScriptEngineRun() {
         try {
             se.loadScript("src/test/lua/test.lua");
-            while (se.scriptLoop() == ScriptEngine.CONTINUE) {
+            while (se.scriptLoop() == ScriptHost.CONTINUE) {
                 logger.info("looping");
             }
             logger.info("Returned from load script\n");

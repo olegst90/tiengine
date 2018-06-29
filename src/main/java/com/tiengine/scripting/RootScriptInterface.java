@@ -1,6 +1,5 @@
 package com.tiengine.scripting;
 
-import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.*;
 import org.slf4j.Logger;
@@ -11,10 +10,10 @@ import org.slf4j.LoggerFactory;
  */
 
 public class RootScriptInterface extends TwoArgFunction {
-    ScriptEngine __parent_engine;
+    ScriptHost __script_host;
 
-    public RootScriptInterface(ScriptEngine parent_engine) {
-        __parent_engine = parent_engine;
+    public RootScriptInterface(ScriptHost script_host) {
+        __script_host = script_host;
     }
 
     Logger logger = LoggerFactory.getLogger(RootScriptInterface.class);
@@ -27,7 +26,7 @@ public class RootScriptInterface extends TwoArgFunction {
 
         //_2d engine
         env.set("_2d", new ScriptInterface2D());
-        env.set("ctrl",new ControlScriptInterface(__parent_engine));
+        env.set("ctrl",new ControlScriptInterface(__script_host));
 
         //env.set("si", __library);
         return env;

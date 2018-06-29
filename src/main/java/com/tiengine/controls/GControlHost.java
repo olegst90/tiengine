@@ -10,19 +10,27 @@ import java.util.List;
  */
 
 public class GControlHost {
+    public static class State {
+        List<GControl> __controls = new LinkedList<>();
+    }
+
+    State __state = new State();
+    public void setState(State state) {__state = state;}
+    public State getState() {return __state;}
+
     GGraphicHost __graphic_host;
     public GControlHost(GGraphicHost graphicHost) {
         __graphic_host = graphicHost;
     }
 
-    List<GControl> __controls = new LinkedList<>();
+
 
     public void putControl(GControl c) {
-        __controls.add(c);
+        __state.__controls.add(c);
         c.attachToGraphicHost(__graphic_host);
     }
 
     public void removeControl(GControl c) {
-        __controls.remove(c);
+        __state.__controls.remove(c);
     }
 }
