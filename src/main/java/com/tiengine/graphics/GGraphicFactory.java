@@ -6,7 +6,8 @@ package com.tiengine.graphics;
 
 public class GGraphicFactory {
     public interface Interface {
-        public GSprite newSprite();
+        public GStillSprite newStillSprite();
+        public GDynamicSprite newDynamicSprite();
         public GTextArea newTextArea();
     }
 

@@ -3,6 +3,7 @@ package com.tiengine.controls;
 import com.tiengine.graphics.GGraphicFactory;
 import com.tiengine.graphics.GGraphicHost;
 import com.tiengine.graphics.GSprite;
+import com.tiengine.graphics.GStillSprite;
 import com.tiengine.graphics.GTextArea;
 
 /**
@@ -11,22 +12,22 @@ import com.tiengine.graphics.GTextArea;
 
 public class GButton extends GControl {
     GTextArea __text;
-    GSprite __sprite;
+    GStillSprite __sprite;
 
     public GButton() {
         __text = GGraphicFactory.graphicFactory().newTextArea();
-        __sprite = GGraphicFactory.graphicFactory().newSprite();
+        __sprite = GGraphicFactory.graphicFactory().newStillSprite();
     }
 
     @Override
     public void attachToGraphicHost(GGraphicHost host) {
-         host.putSprite(__sprite);
+         host.putStillSprite(__sprite);
          host.putTextArea(__text);
     }
 
     @Override
     public void detachFromGraphicHost(GGraphicHost host) {
-        host.removeSprite(__sprite);
+        host.removeStillSprite(__sprite);
         host.removeTextArea(__text);
     }
 

@@ -50,7 +50,7 @@ public class ControlScriptInterface extends LuaTable {
             System.out.format("text [%d:%d]: %s\n", x.toint(), y.toint(), text.toString());
             GTextArea area = GGraphicFactory.graphicFactory().newTextArea();
             area.setText(text.toString());
-            area.setPosition(x.toint(), y.toint());
+            area.moveAbs(x.toint(), y.toint(), 0);
             return LuaValue.userdataOf(area);
         }
     }

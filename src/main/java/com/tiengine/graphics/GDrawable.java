@@ -1,31 +1,21 @@
 package com.tiengine.graphics;
 
+import java.nio.Buffer;
+
 /**
  * Created by olegst on 27.06.18.
  */
 
-public class GDrawable {
-    public class Rectangle {
-        int x,y,w,h;
-        public Rectangle(int x, int y, int w, int h) {
-            this.x = x; this.y = y; this.w = w; this.h = h;
-        }
-        public Rectangle() {
+public interface GDrawable {
+    void move(float x, float y, float z);
+    void moveAbs(float x, float y, float z);
 
-        }
-    }
-    Rectangle __position = new Rectangle();
+    void rotate(float x, float y, float z, float angle);
+    void rotateAbs(float x, float y, float z, float angle);
 
-    public void setPosition(Rectangle position) {
-        __position = position;
-    }
+    // if buffer is null, return size it'll take
+    // otherwise fill the buffer and return size
+    int prepare(Buffer buffer, int offset);
 
-    public void setPosition(int x, int y) {
-        __position.x = x;
-        __position.y = y;
-    }
-
-    public void render() {
-
-    }
+    void render();
 }
